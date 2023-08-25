@@ -18,13 +18,25 @@ describe('GET /Teams', () => {
   
     beforeEach(function () { sinon.restore(); });
     
-  it('should return AllBooks', async () => {
+  it('should return AllTeams', async () => {
      chaiHttpResponse = await chai
     .request(app)
     .get('/teams')
 
     expect(chaiHttpResponse.status).to.equal(200)
     expect(chaiHttpResponse.body).to.be.deep.equal(teamsMock.findAllTeamsResponse)
+})
+
+it('when findById ', async () => {
+
+    const findId = {id: 5}
+    chaiHttpResponse = await chai
+   .request(app)
+   .get('/teams')
+   .send(findId)
+
+   expect(chaiHttpResponse.status).to.equal(200)
+   expect(chaiHttpResponse.body).to.be.deep.equal(teamsMock.findByIdResponse)
 })
 
   });

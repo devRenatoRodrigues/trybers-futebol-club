@@ -8,8 +8,6 @@ export default class TeamsController {
   ) { }
 
   public async getAllTeams(_req: Request, res: Response): Promise<Response> {
-    console.log(res);
-
     const serviceResponse = await this.teamService.getAllTeams();
     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }

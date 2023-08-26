@@ -5,7 +5,6 @@ import  teamsMock from './mocks/teams.mock'
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-// import SequelizeTeam from '../../database/models/SequelizeTeam.model';
 
 import { Response } from 'superagent';
 import SequelizeTeam from '../database/models/SequelizeTeam.model';

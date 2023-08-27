@@ -10,12 +10,20 @@ const validTokenAcess = {
   }
 
   const loginBodyWithoutEmail = {
-    password: "123456"
+    password: "secret_admin"
   }
 
   const loginBodyWithoutPassword = {
     email: 'valid@email.com'
   }
+
+  const userDatabase = [ {
+    username: 'Admin',
+    role: 'admin',
+    email: 'valid@email.com',
+    password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW'
+      // senha: secret_admin
+  }]
 
   export default {
     validTokenAcess,
@@ -23,4 +31,5 @@ const validTokenAcess = {
     validLoginBody,
     loginBodyWithoutEmail,
     loginBodyWithoutPassword,
+    userDatabase,
   }

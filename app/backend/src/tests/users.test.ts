@@ -8,6 +8,8 @@ import { app } from '../app'
 import { Response } from 'superagent';
 import usersMock from './mocks/users.mock';
 
+import SequelizeUser from '../database/models/SequelizeUser.model'
+
 chai.use(chaiHttp);
 
 const { expect } = chai;
@@ -18,7 +20,9 @@ describe('POST /login', () => {
     beforeEach(function () { sinon.restore(); });
     
   it('invalid email body', async () => {
+  sinon.stub(SequelizeUser, 'findOne').resolves(null)
     
+
      chaiHttpResponse = await chai
     .request(app)
     .post('/login')
@@ -29,6 +33,8 @@ describe('POST /login', () => {
 })
 
 it('invalid password body', async () => {
+  sinon.stub(SequelizeUser, 'findOne').resolves(null)
+
   chaiHttpResponse = await chai
  .request(app)
  .post('/login')
@@ -39,12 +45,14 @@ it('invalid password body', async () => {
 })
 
 it('valid email and password', async () => {
+  sinon.stub(SequelizeUser, 'findOne').resolves(usersMock.userDatabase as any)
+
   chaiHttpResponse = await chai
  .request(app)
  .post('/login')
  .send(usersMock.validLoginBody)
 
- expect(chaiHttpResponse.status).to.equal(400)
+ expect(chaiHttpResponse.status).to.equal(200)
  expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.validTokenAcess)
 })
 

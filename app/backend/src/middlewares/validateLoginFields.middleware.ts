@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import mapStatusHTTP from '../utils/mapStatusHTTP.utils';
 
-async function loginMiddleware(req: Request, res: Response, next: NextFunction): Promise<unknown> {
+async function validateLoginFields(req: Request, res: Response, next: NextFunction)
+  : Promise<unknown> {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -12,4 +13,4 @@ async function loginMiddleware(req: Request, res: Response, next: NextFunction):
   next();
 }
 
-export default loginMiddleware;
+export default validateLoginFields;

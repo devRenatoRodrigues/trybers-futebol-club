@@ -9,6 +9,7 @@ import { Response } from 'superagent';
 import usersMock from './mocks/users.mock';
 
 import SequelizeUser from '../database/models/SequelizeUser.model'
+import JWTUtils from '../utils/JWT.utils';
 
 chai.use(chaiHttp);
 
@@ -46,6 +47,7 @@ it('invalid password body', async () => {
 
 it('valid email and password', async () => {
   sinon.stub(SequelizeUser, 'findOne').resolves(usersMock.userDatabase as any)
+  sinon.stub(JWTUtils, 'sign').returns(usersMock.token)
 
   chaiHttpResponse = await chai
  .request(app)
@@ -53,6 +55,7 @@ it('valid email and password', async () => {
  .send(usersMock.validLoginBody)
 
  expect(chaiHttpResponse.status).to.equal(200)
+ expect(chaiHttpResponse.body).to.have.a.key('token')
  expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.validTokenAcess)
 })
 

@@ -13,3 +13,7 @@ export interface IUser extends Identifiable {
 }
 
 export type IUserResponse = Omit<IUser, 'password'>;
+
+export type IUserRole = {
+  role: string
+};

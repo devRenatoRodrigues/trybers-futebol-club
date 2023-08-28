@@ -14,4 +14,13 @@ export default class UserController {
     }
     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
+
+  public async getRole(req: Request, res: Response): Promise<Response> {
+    const { authorization } = req.headers;
+    const serviceResponse = await this.userService.getRole(authorization);
+    if (serviceResponse.status !== 'SUCCESSFUL') {
+      return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
+    }
+    return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
+  }
 }

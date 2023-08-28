@@ -15,6 +15,10 @@ async function validateLoginFields(req: Request, res: Response, next: NextFuncti
     return res.status(mapStatusHTTP('UNAUTHORIZED')).json({ message: 'Invalid email or password' });
   }
 
+  if (password.length < 6) {
+    return res.status(mapStatusHTTP('UNAUTHORIZED')).json({ message: 'Invalid email or password' });
+  }
+
   next();
 }
 

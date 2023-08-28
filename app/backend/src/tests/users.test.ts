@@ -10,6 +10,7 @@ import usersMock from './mocks/users.mock';
 
 import SequelizeUser from '../database/models/SequelizeUser.model'
 import JWTUtils from '../utils/JWT.utils';
+import validateToken from '../middlewares/validateToken.middleware';
 
 chai.use(chaiHttp);
 
@@ -69,14 +70,14 @@ it('invalid password body', async () => {
 })
 
 it('valid email and password', async () => {
-  sinon.stub(SequelizeUser, 'findOne').resolves(usersMock.userDatabase as any)
-  sinon.stub(JWTUtils, 'sign').returns(usersMock.token)
+  sinon.stub(SequelizeUser, 'findOne').resolves(usersMock.validUser as any)
+   sinon.stub(JWTUtils, 'sign').returns(usersMock.token)
 
   chaiHttpResponse = await chai
  .request(app)
  .post('/login')
  .send(usersMock.validLoginBody)
-
+ 
  expect(chaiHttpResponse.status).to.equal(200)
  expect(chaiHttpResponse.body).to.have.a.key('token')
  expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.validTokenAcess)
@@ -91,13 +92,14 @@ describe('GET /login/role TESTS', () => {
   beforeEach(function () { sinon.restore(); });
 
 it('when send valid token return role', async () => {
-  sinon.stub(SequelizeUser, 'findByPk').resolves(usersMock.userDatabase as any)
-  sinon.stub(JWTUtils, 'verify').resolves();
-
+  sinon.stub(JWTUtils, 'verify').resolves(usersMock.token);
+  sinon.stub(SequelizeUser, 'findOne').resolves(usersMock.validUser as any)
 
   chaiHttpResponse = await chai
  .request(app)
- .get('/login/role');
+ .get('/login/role')
+ .set('authorization', usersMock.token);
+
 
  expect(chaiHttpResponse.status).to.equal(200)
  expect(chaiHttpResponse.body).to.have.a.key('role')
@@ -110,7 +112,7 @@ it('when send invalid token', async () => {
   chaiHttpResponse = await chai
  .request(app)
  .get('/login/role')
- .set('Autorization', 'invalidToken')
+ .set('authorization', 'invalidToken')
 
  expect(chaiHttpResponse.status).to.equal(401)
  expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.invalidTokenResponse)
@@ -122,7 +124,7 @@ it('when not send a token', async () => {
  .request(app)
  .get('/login/role')
 
- expect(chaiHttpResponse.status).to.equal(404)
+ expect(chaiHttpResponse.status).to.equal(401)
  expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.withoutTokenResponse)
 })
 

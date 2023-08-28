@@ -15,12 +15,12 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('POST /login', () => {
+describe('POST /login TESTS', () => {
     let chaiHttpResponse: Response;
   
     beforeEach(function () { sinon.restore(); });
     
-  it('invalid email body', async () => {
+  it('without email body', async () => {
   sinon.stub(SequelizeUser, 'findOne').resolves(null)
     
 
@@ -33,7 +33,7 @@ describe('POST /login', () => {
     expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.WithoutEmailOrPasswordResponse)
 })
 
-it('invalid password body', async () => {
+it('without password body', async () => {
   sinon.stub(SequelizeUser, 'findOne').resolves(null)
 
   chaiHttpResponse = await chai
@@ -43,6 +43,29 @@ it('invalid password body', async () => {
 
  expect(chaiHttpResponse.status).to.equal(400)
  expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.WithoutEmailOrPasswordResponse)
+})
+
+
+it('invalid email body', async () => {
+
+  chaiHttpResponse = await chai
+ .request(app)
+ .post('/login')
+ .send(usersMock.loginWithInvalidEmail)
+
+ expect(chaiHttpResponse.status).to.equal(401)
+ expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.invalidPasswordOrEmailResponse)
+})
+
+it('invalid password body', async () => {
+
+  chaiHttpResponse = await chai
+ .request(app)
+ .post('/login')
+ .send(usersMock.loginWithInvalidPassword)
+
+ expect(chaiHttpResponse.status).to.equal(401)
+ expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.invalidPasswordOrEmailResponse)
 })
 
 it('valid email and password', async () => {
@@ -59,4 +82,49 @@ it('valid email and password', async () => {
  expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.validTokenAcess)
 })
 
-  });
+
+});
+
+describe('GET /login/role TESTS', () => {
+  let chaiHttpResponse: Response;
+
+  beforeEach(function () { sinon.restore(); });
+
+it('when send valid token return role', async () => {
+  sinon.stub(SequelizeUser, 'findByPk').resolves(usersMock.userDatabase as any)
+  sinon.stub(JWTUtils, 'verify').resolves();
+
+
+  chaiHttpResponse = await chai
+ .request(app)
+ .get('/login/role');
+
+ expect(chaiHttpResponse.status).to.equal(200)
+ expect(chaiHttpResponse.body).to.have.a.key('role')
+ expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.roleUserResponse)
+})
+
+
+it('when send invalid token', async () => {
+
+  chaiHttpResponse = await chai
+ .request(app)
+ .get('/login/role')
+ .set('Autorization', 'invalidToken')
+
+ expect(chaiHttpResponse.status).to.equal(401)
+ expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.invalidTokenResponse)
+})
+
+it('when not send a token', async () => {
+ 
+  chaiHttpResponse = await chai
+ .request(app)
+ .get('/login/role')
+
+ expect(chaiHttpResponse.status).to.equal(404)
+ expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.withoutTokenResponse)
+})
+
+
+})

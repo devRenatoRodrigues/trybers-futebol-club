@@ -19,6 +19,16 @@ const validTokenAcess = {
     email: 'valid@email.com'
   }
 
+  const loginWithInvalidEmail = {
+    email: 'invalid_email.com',
+    password: "secret_admin"
+  }
+
+  const loginWithInvalidPassword = {
+    email: 'valid@email.com',
+    password: "secret_admin"
+  }
+
   const userDatabase = [ {
     username: 'Admin',
     role: 'admin',
@@ -27,6 +37,12 @@ const validTokenAcess = {
       // senha: secret_admin
   }]
 
+  const invalidPasswordOrEmailResponse = { "message": "Invalid email or password" }
+  const withoutTokenResponse = { "message": "Token not found" }
+  const invalidTokenResponse = { "message": "Token must be a valid token" }
+
+  const roleUserResponse =   { "role": "admin" }
+
   export default {
     validTokenAcess,
     WithoutEmailOrPasswordResponse,
@@ -34,5 +50,11 @@ const validTokenAcess = {
     loginBodyWithoutEmail,
     loginBodyWithoutPassword,
     userDatabase,
-    token
+    token,
+    invalidPasswordOrEmailResponse,
+    withoutTokenResponse,
+    invalidTokenResponse,
+    roleUserResponse,
+    loginWithInvalidPassword,
+    loginWithInvalidEmail,
   }

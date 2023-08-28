@@ -26,12 +26,12 @@ export default class UserService {
   }
 
   public async getRole(token: string | undefined): Promise<ServiceResponse<IUserRole>> {
-    if (!token) return { status: 'NOT_FOUND', data: { message: 'User not found' } };
+    if (!token) return { status: 'NOT_FOUND', data: { message: 'Token not found' } };
 
     const decodedUser = this.jwtService.verify(token);
-
     const user = await this.userModel.findByEmail(decodedUser.email);
-    if (!user) return { status: 'NOT_FOUND', data: { message: 'Invalid User' } };
+
+    if (!user) return { status: 'NOT_FOUND', data: { message: 'Token must be a valid token' } };
     return { status: 'SUCCESSFUL', data: { role: user.role } };
   }
 }

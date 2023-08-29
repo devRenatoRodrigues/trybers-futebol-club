@@ -4,8 +4,11 @@ export interface ICRUDModelCreator<T> {
   create(data: Partial<T>): Promise<T>,
 }
 
-export interface ICRUDModelReader<T> {
+export interface ICRUDModelFindAll<T> {
   findAll(): Promise<T[]>,
+}
+
+export interface ICRUDModelFindByID<T> {
   findById(id: ID): Promise<T | null>,
 }
 

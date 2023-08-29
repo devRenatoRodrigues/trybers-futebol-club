@@ -1,9 +1,9 @@
 // import { NewEntity } from '../Interfaces';
 import { ITeam } from '../Interfaces/teams/ITeam';
-import { ITeamModel } from '../Interfaces/teams/ITeamModel';
+import { ITeamFindAll, ITeamFindByID } from '../Interfaces/teams/ITeamModel';
 import SequelizeTeam from '../database/models/SequelizeTeam.model';
 
-export default class TeamModel implements ITeamModel {
+export default class TeamModel implements ITeamFindAll, ITeamFindByID {
   private model = SequelizeTeam;
 
   async findAll(): Promise<ITeam[]> {

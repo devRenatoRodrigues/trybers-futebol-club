@@ -1,6 +1,5 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
-import  teamsMock from './mocks/teams.mock'
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
@@ -26,6 +25,9 @@ describe('GET /matches', () => {
      chaiHttpResponse = await chai
     .request(app)
     .get('/matches')
+
+console.log(chaiHttpResponse);
+
 
     expect(chaiHttpResponse.status).to.equal(200)
     expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.getAllMatchesResolves)

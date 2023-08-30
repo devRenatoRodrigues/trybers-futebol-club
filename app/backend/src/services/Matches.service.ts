@@ -23,7 +23,7 @@ export default class MatchesService {
     return { status: 'SUCCESSFUL', data: findAllMatches };
   }
 
-  public async updateMatchProgress(id: IMatches['id'] | null)
+  public async updateMatchProgress(id: IMatches['id'])
     : Promise<ServiceResponse<ServiceMessage>> {
     if (!id) return { status: 'NOT_FOUND', data: { message: 'Match Not Found' } };
 
@@ -46,6 +46,6 @@ export default class MatchesService {
         data: { message: `There are no updates to perform in match ${id}` } };
     }
 
-    return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
+    return { status: 'SUCCESSFUL', data: { message: 'Updated' } };
   }
 }

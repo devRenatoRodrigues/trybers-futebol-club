@@ -12,4 +12,14 @@ router.get('/', (req: Request, res: Response) => {
   }
 });
 
+router.patch(
+  '/:id/',
+  (req: Request, res: Response) => { matchesController.updateMatchGoals(req, res); },
+);
+
+router.patch(
+  '/:id/finish',
+  (req: Request, res: Response) => { matchesController.updateMatchProgress(req, res); },
+);
+
 export default router;

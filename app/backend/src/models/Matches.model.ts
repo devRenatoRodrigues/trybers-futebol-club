@@ -37,7 +37,7 @@ export default class MatchesModel implements IMatchesFindAll,
   async updateProgress(id: IMatches['id']): Promise<IMatches | null> {
     const data = await this.findByPk(id);
     if (!data) return null;
-    const [affectedRows] = await this.model.update({ inProgress: true }, { where: { id } });
+    const [affectedRows] = await this.model.update({ inProgress: false }, { where: { id } });
     if (affectedRows === 0) return null;
     return this.findByPk(id);
   }

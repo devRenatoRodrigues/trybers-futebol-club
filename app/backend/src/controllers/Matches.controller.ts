@@ -11,4 +11,12 @@ export default class TeamsController {
     const serviceResponse = await this.matchesService.getAllMatches();
     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
+
+  public async findByProgress(req: Request, res: Response): Promise<Response> {
+    const { inProgress } = req.query;
+    const queryToBool = inProgress === 'true';
+
+    const serviceResponse = await this.matchesService.findByProgress(queryToBool);
+    return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
+  }
 }

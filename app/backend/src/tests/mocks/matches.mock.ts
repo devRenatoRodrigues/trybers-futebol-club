@@ -1,6 +1,14 @@
 const messageEqualsTeam = { message: "It is not possible to create a match with two equal teams" }
 const messageNotExistTeamId = { message: "There is no team with such id!" }
 
+const teamsDatabase = [
+  { id: 16,teamName: "São Paulo" },
+  { id: 8,teamName: "Grêmio" },
+  { id: 9,teamName: "Internacional" },
+  { id: 6,teamName: "Ferroviária" },
+  { id: 1,teamName: "Avaí/Kindermann" },
+]
+
 const getAllMatchesResolves = [
     {
       id: 1,
@@ -123,6 +131,68 @@ const getAllMatchesResolves = [
         awayTeamGoals: 2
       }
 
+      const findAllMatchesTrueResolves = [
+        {
+          id: 1,
+          homeTeamId: 16,
+          homeTeamGoals: 1,
+          awayTeamId: 8,
+          awayTeamGoals: 1,
+          inProgress: true,
+          homeTeam: {
+            teamName: "São Paulo"
+          },
+          awayTeam: {
+            teamName: "Grêmio"
+          }
+        },
+        {
+          id: 41,
+          homeTeamId: 16,
+          homeTeamGoals: 2,
+          awayTeamId: 9,
+          awayTeamGoals: 0,
+          inProgress: true,
+          homeTeam: {
+            teamName: "São Paulo"
+          },
+          awayTeam: {
+            teamName: "Internacional"
+          }
+        }
+      ]
+
+      const findAllMatchesFalseResolves = [
+        {
+          id: 1,
+          homeTeamId: 16,
+          homeTeamGoals: 1,
+          awayTeamId: 8,
+          awayTeamGoals: 1,
+          inProgress: false,
+          homeTeam: {
+            teamName: "São Paulo"
+          },
+          awayTeam: {
+            teamName: "Grêmio"
+          }
+        },
+        {
+          id: 41,
+          homeTeamId: 16,
+          homeTeamGoals: 2,
+          awayTeamId: 9,
+          awayTeamGoals: 0,
+          inProgress: false,
+          homeTeam: {
+            teamName: "São Paulo"
+          },
+          awayTeam: {
+            teamName: "Internacional"
+          }
+        }
+      ]
+
 
   export default {
     getAllMatchesResolves,
@@ -134,5 +204,8 @@ const getAllMatchesResolves = [
     newMatchesCreateWithTwoEqualsTeam,
     newMatchesCreateWithInvalidTeamId,
     messageEqualsTeam,
-    messageNotExistTeamId
+    messageNotExistTeamId,
+    teamsDatabase,
+    findAllMatchesTrueResolves,
+    findAllMatchesFalseResolves
   }

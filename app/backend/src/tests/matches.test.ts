@@ -8,6 +8,7 @@ import { app } from '../app';
 import { Response } from 'superagent';
 import SequelizeMatches from '../database/models/SequelizeMatches.model';
 import matchesMock from './mocks/matches.mock';
+import SequelizeTeam from '../database/models/SequelizeTeam.model';
 
 chai.use(chaiHttp);
 
@@ -20,24 +21,39 @@ describe('ROUTE /matches', () => {
     
   it('should return AllMatches', async () => {
     sinon.stub(SequelizeMatches, 'findAll').resolves(matchesMock.getAllMatchesResolves as any)
+    // sinon.stub(SequelizeTeam, 'findAll').resolves(matchesMock.teamsDatabase as any)
 
      chaiHttpResponse = await chai
     .request(app)
     .get('/matches')
 
+
     expect(chaiHttpResponse.status).to.equal(200)
     expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.getAllMatchesResolves)
 })
 
-it('should filtered matches', async () => {
-  sinon.stub(SequelizeMatches, 'findAll').resolves(matchesMock.getAllMatchesResolves as any)
+it('should filtered inProgress false matches', async () => {
+  sinon.stub(SequelizeMatches, 'findAll').resolves(matchesMock.findAllMatchesFalseResolves as any)
 
    chaiHttpResponse = await chai
   .request(app)
   .get('/matches')
+  .query({ inProgress: 'false' });
 
   expect(chaiHttpResponse.status).to.equal(200)
-  expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.getAllMatchesResolves)
+  expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.findAllMatchesFalseResolves)
+})
+
+it('should filtered inProgress true matches', async () => {
+  sinon.stub(SequelizeMatches, 'findAll').resolves(matchesMock.findAllMatchesTrueResolves as any)
+
+   chaiHttpResponse = await chai
+  .request(app)
+  .get('/matches')
+  .query({ inProgress: 'true' });
+
+  expect(chaiHttpResponse.status).to.equal(200)
+  expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.findAllMatchesTrueResolves)
 })
 
 it('should filtered matches equals true', async () => {
@@ -89,26 +105,26 @@ it('create new match', async () => {
 
 })
 
-it('create new match', async () => {
+it('body with not exist team', async () => {
 
    chaiHttpResponse = await chai
   .request(app)
   .post('/matches')
   .send(matchesMock.messageNotExistTeamId)
 
-  expect(chaiHttpResponse.status).to.equal(201)
+  expect(chaiHttpResponse.status).to.equal(422)
   expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.messageEqualsTeam)
 
 })
 
-it('create new match', async () => {
+it('body with two equals team', async () => {
 
   chaiHttpResponse = await chai
  .request(app)
  .post('/matches')
  .send(matchesMock.newMatchesCreateWithInvalidTeamId)
 
- expect(chaiHttpResponse.status).to.equal(201)
+ expect(chaiHttpResponse.status).to.equal(404)
  expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.messageNotExistTeamId)
 
 })

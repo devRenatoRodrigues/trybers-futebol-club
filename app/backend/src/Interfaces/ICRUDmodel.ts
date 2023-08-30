@@ -8,12 +8,21 @@ export interface ICRUDModelFindAll<T> {
   findAll(): Promise<T[]>,
 }
 
+export interface ICRUDModelByProgress<T> {
+  findByProgress(boolean: boolean): Promise<T[]>
+}
+
 export interface ICRUDModelFindByID<T> {
   findById(id: ID): Promise<T | null>,
 }
 
-export interface ICRUDModelUpdater<T> {
-  update(id: ID, data: Partial<T>): Promise<T | null>,
+export interface ICRUDModelFindByPK<T> {
+  findByPk(id: ID): Promise<T | null>,
+}
+
+export interface ICRUDMatcheUpdater<T> {
+  updateProgress(id: ID, data: Partial<T>): Promise<T | null>,
+  updateProgress(id: ID, data: Partial<T>): Promise<T | null>,
 }
 
 export interface ICRUDModelDeleter {

@@ -101,6 +101,26 @@ const getAllMatchesResolves = [
     }
   }
 
+  const matchesUpdateGoalsResolves = {
+    id: 1,
+    homeTeamId: 16,
+    homeTeamGoals: 3,
+    awayTeamId: 9,
+    awayTeamGoals: 1,
+    inProgress: false,
+    homeTeam: {
+      teamName: "São Paulo"
+    },
+    awayTeam: {
+      teamName: "Internacional"
+    }
+  }
+
+ const matchesUpdateGoalsBody =  {
+    homeTeamGoals: 3,
+    awayTeamGoals: 1
+  }
+
   const newMatcheCreateBody = {
       homeTeamId: 16, // O valor deve ser o id do time
       awayTeamId: 8, // O valor deve ser o id do time
@@ -195,6 +215,8 @@ const getAllMatchesResolves = [
 
 
   export default {
+    matchesUpdateGoalsBody,
+    matchesUpdateGoalsResolves,
     getAllMatchesResolves,
     findInProgressTrue,
     matchesFinishedDatabase,

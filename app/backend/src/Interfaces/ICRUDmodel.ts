@@ -21,8 +21,8 @@ export interface ICRUDModelFindByPK<T> {
 }
 
 export interface ICRUDMatcheUpdater<T> {
-  updateProgress(id: ID, data: Partial<T>): Promise<T | null>,
-  updateProgress(id: ID, data: Partial<T>): Promise<T | null>,
+  updateProgress(id: ID): Promise<T | null>,
+  updateGoals(id: ID, data: Partial<T>): Promise<T | null>,
 }
 
 export interface ICRUDModelDeleter {
@@ -30,5 +30,5 @@ export interface ICRUDModelDeleter {
 }
 
 export interface ICRUDModel<T>
-  extends ICRUDModelCreator<T>, ICRUDModelUpdater<T>,
+  extends ICRUDModelCreator<T>, ICRUDMatcheUpdater<T>,
   ICRUDModelDeleter { }

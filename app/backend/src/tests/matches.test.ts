@@ -56,7 +56,7 @@ it('should filtered inProgress true matches', async () => {
   expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.findAllMatchesTrueResolves)
 })
 
-it('should filtered matches equals true', async () => {
+it('should change in progress to false', async () => {
   sinon.stub(SequelizeMatches, 'findByPk').resolves(matchesMock.matchesFinishedDatabase as any)
 
    chaiHttpResponse = await chai
@@ -68,27 +68,17 @@ it('should filtered matches equals true', async () => {
 
 })
 
-it('should filtered matches equals true', async () => {
-  sinon.stub(SequelizeMatches, 'findByPk').resolves(matchesMock.matchesFinishedDatabase as any)
 
-   chaiHttpResponse = await chai
-  .request(app)
-  .patch('/matches/1/finish')
-
-  expect(chaiHttpResponse.status).to.equal(200)
-  expect(chaiHttpResponse.body).to.be.deep.equal({ message: "Finished" })
-
-})
-
-it('should filtered matches equals true', async () => {
+it('should update home and aways goals', async () => {
   sinon.stub(SequelizeMatches, 'findByPk').resolves(matchesMock.matchesUpdateGoalsDatabase as any)
 
    chaiHttpResponse = await chai
   .request(app)
   .patch('/matches/1')
+  .send(matchesMock.matchesUpdateGoalsBody)
 
   expect(chaiHttpResponse.status).to.equal(200)
-  expect(chaiHttpResponse.body).to.be.deep.equal({ message: 'Updated' })
+  expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.matchesUpdateGoalsResolves)
 
 })
 

@@ -5,5 +5,5 @@ export interface IMatches extends Identifiable {
   homeTeamGoals: number,
   awayTeamId: number,
   awayTeamGoals: number,
-  inProgress: boolean
+  inProgress?: boolean
 }

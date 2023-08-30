@@ -20,7 +20,7 @@ async function validateToken(req: Request, res: Response, next: NextFunction)
         .status(mapStatusHTTP('UNAUTHORIZED')).json({ message: 'Token must be a valid token' });
     }
 
-    next();
+    return next();
   } catch (e) {
     return res
       .status(mapStatusHTTP('UNAUTHORIZED')).json({ message: 'Token must be a valid token' });

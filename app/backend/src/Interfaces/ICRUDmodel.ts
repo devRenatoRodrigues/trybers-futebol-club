@@ -1,7 +1,7 @@
 import { ID } from '.';
 
 export interface ICRUDModelCreator<T> {
-  create(data: Partial<T>): Promise<T>,
+  create(data: Partial<T>): Promise<T | null>,
 }
 
 export interface ICRUDModelFindAll<T> {

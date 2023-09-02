@@ -1,6 +1,4 @@
-import { ICRUDModelFindAll, ICRUDModelFindByID } from '../ICRUDmodel';
+import { ICRUDTeams } from '../ICRUDmodel';
 import { ITeam } from './ITeam';
 
-export type ITeamFindAll = ICRUDModelFindAll<ITeam>;
-
-export type ITeamFindByID = ICRUDModelFindByID<ITeam>;
+export type ITeamModel = ICRUDTeams<ITeam>;

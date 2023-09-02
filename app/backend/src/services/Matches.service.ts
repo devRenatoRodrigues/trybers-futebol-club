@@ -2,17 +2,11 @@ import { NewEntity } from '../Interfaces';
 import MatchesModel from '../models/Matches.model';
 import { ServiceMessage, ServiceResponse } from '../Interfaces/ServiceResponse';
 import { IMatches } from '../Interfaces/matches/IMatches';
-import { IMatchesCreate, IMatchesFindAll,
-  IMatchesFindbyProgress,
-  IMatchesUpdate,
-} from '../Interfaces/matches/IMatchesModel';
+import { IMatchModel } from '../Interfaces/matches/IMatchesModel';
 
 export default class MatchesService {
   constructor(
-    private matchesModel: IMatchesFindAll = new MatchesModel(),
-    private matchesModelByProgress: IMatchesFindbyProgress = new MatchesModel(),
-    private matchesModelUpdate: IMatchesUpdate = new MatchesModel(),
-    private matchesModelCreate: IMatchesCreate = new MatchesModel(),
+    private matchesModel: IMatchModel = new MatchesModel(),
   ) { }
 
   public async getAllMatches(): Promise<ServiceResponse<IMatches[]>> {
@@ -21,7 +15,7 @@ export default class MatchesService {
   }
 
   public async findByProgress(progress: boolean): Promise<ServiceResponse<IMatches[]>> {
-    const findAllMatches = await this.matchesModelByProgress.findByProgress(progress);
+    const findAllMatches = await this.matchesModel.findByProgress(progress);
     return { status: 'SUCCESSFUL', data: findAllMatches };
   }
 
@@ -29,7 +23,7 @@ export default class MatchesService {
     : Promise<ServiceResponse<ServiceMessage>> {
     if (!id) return { status: 'NOT_FOUND', data: { message: 'Match Not Found' } };
 
-    const updateProgress = await this.matchesModelUpdate.updateProgress(id);
+    const updateProgress = await this.matchesModel.updateProgress(id);
     if (!updateProgress) {
       return { status: 'CONFLICT',
         data: { message: `There are no updates to perform in match ${id}` } };
@@ -42,7 +36,7 @@ export default class MatchesService {
     : Promise<ServiceResponse<ServiceMessage>> {
     if (!id) return { status: 'NOT_FOUND', data: { message: 'Match Not Found' } };
 
-    const updateProgress = await this.matchesModelUpdate.updateGoals(id, match);
+    const updateProgress = await this.matchesModel.updateGoals(id, match);
     if (!updateProgress) {
       return { status: 'CONFLICT',
         data: { message: `There are no updates to perform in match ${id}` } };
@@ -52,12 +46,12 @@ export default class MatchesService {
   }
 
   public async createNewMatch(data:NewEntity<IMatches>): Promise<ServiceResponse<IMatches | null>> {
-    console.log(data);
-
-    if (!data) {
+    const homeTeamExist = await this.matchesModel.findByPk(data.homeTeamId);
+    const awayTeamExist = await this.matchesModel.findByPk(data.awayTeamId);
+    if (!homeTeamExist || !awayTeamExist) {
       return { status: 'NOT_FOUND', data: { message: 'There is no team with such id!' } };
     }
-    const newmatch = await this.matchesModelCreate.create(data);
+    const newmatch = await this.matchesModel.create(data);
     return { status: 'CREATED', data: newmatch };
   }
 }

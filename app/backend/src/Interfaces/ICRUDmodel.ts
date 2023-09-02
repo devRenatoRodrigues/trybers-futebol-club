@@ -12,10 +12,6 @@ export interface ICRUDModelByProgress<T> {
   findByProgress(boolean: boolean): Promise<T[]>
 }
 
-export interface ICRUDModelFindByID<T> {
-  findById(id: ID): Promise<T | null>,
-}
-
 export interface ICRUDModelFindByPK<T> {
   findByPk(id: ID): Promise<T | null>,
 }
@@ -29,6 +25,15 @@ export interface ICRUDModelDeleter {
   delete(id: ID): Promise<number>,
 }
 
-export interface ICRUDModel<T>
-  extends ICRUDModelCreator<T>, ICRUDMatcheUpdater<T>,
-  ICRUDModelDeleter { }
+export interface ICRUDMatch<T>
+  extends ICRUDModelFindByPK<T>, ICRUDModelFindAll<T>,
+  ICRUDMatcheUpdater<T>, ICRUDModelCreator<T>, ICRUDModelByProgress<T> { }
+
+export interface ICRUDTeams<T>
+  extends ICRUDModelFindByPK<T>, ICRUDModelFindAll<T> { }
+
+export interface ICRUDModelLeaderboard<T> {
+  getHomeTeamsClassification(): Promise<T[] | null>,
+  getAwayClassification(): Promise<T[] | null>,
+  getClassification(): Promise<T[] | null>,
+}

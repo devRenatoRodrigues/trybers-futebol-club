@@ -1,17 +1,10 @@
+import { IMatchModel } from '../Interfaces/matches/IMatchesModel';
 import { NewEntity } from '../Interfaces';
 import { IMatches } from '../Interfaces/matches/IMatches';
-import { IMatchesCreate, IMatchesFindAll,
-  IMatchesFindbyPk,
-  IMatchesFindbyProgress,
-  IMatchesUpdate,
-} from '../Interfaces/matches/IMatchesModel';
+
 import SequelizeMatches from '../database/models/SequelizeMatches.model';
 
-export default class MatchesModel implements IMatchesFindAll,
- IMatchesFindbyPk,
- IMatchesFindbyProgress,
- IMatchesUpdate,
- IMatchesCreate {
+export default class MatchesModel implements IMatchModel {
   private model = SequelizeMatches ;
 
   async findAll(): Promise<IMatches[]> {
@@ -57,13 +50,6 @@ export default class MatchesModel implements IMatchesFindAll,
 
   async create(data: NewEntity<IMatches>): Promise<IMatches | null> {
     const dbData = await this.model.create(data);
-    const homeTeamExist = await this.findByPk(data.homeTeamId);
-    const awayTeamExist = await this.findByPk(data.awayTeamId);
-    // console.log(homeTeamExist);
-    // console.log(awayTeamExist);
-
-    if (!homeTeamExist) return null;
-    if (!awayTeamExist) return null;
     const { id, homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals, inProgress } = dbData;
     return { id, homeTeamId, homeTeamGoals, awayTeamId, awayTeamGoals, inProgress };
   }

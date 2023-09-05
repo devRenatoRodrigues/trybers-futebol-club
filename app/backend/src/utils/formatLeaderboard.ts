@@ -59,30 +59,22 @@ export function upateTableGoals(matches: IMatchesTeam[], leaderboard: ILeaderboa
   return leaderboard;
 }
 
-function compareTeams(teamA: ILeaderboard, teamB: ILeaderboard): number {
-  if (teamA.totalVictories > teamB.totalVictories) {
-    return -1;
-  } if (teamA.totalVictories < teamB.totalVictories) {
-    return 1;
-  }
-
-  if (teamA.goalsBalance > teamB.goalsBalance) {
-    return -1;
-  } if (teamA.goalsBalance < teamB.goalsBalance) {
-    return 1;
-  }
-
-  if (teamA.goalsFavor > teamB.goalsFavor) {
-    return -1;
-  } if (teamA.goalsFavor < teamB.goalsFavor) {
-    return 1;
-  }
-
-  return 0;
-}
-
 export function sortLeaderboard(leaderboard: ILeaderboard[]): ILeaderboard[] {
-  return leaderboard.sort(compareTeams);
+  return leaderboard.sort((teamA, teamB) => {
+    if (teamA.totalPoints !== teamB.totalPoints) {
+      return teamB.totalPoints - teamA.totalPoints;
+    }
+
+    if (teamA.totalVictories !== teamB.totalVictories) {
+      return teamB.totalVictories - teamA.totalVictories;
+    }
+
+    if (teamA.goalsBalance !== teamB.goalsBalance) {
+      return teamB.goalsBalance - teamA.goalsBalance;
+    }
+
+    return teamB.goalsFavor - teamA.goalsFavor;
+  });
 }
 
 export function upateTablePoints(leaderboard: ILeaderboardWithoutSum[])

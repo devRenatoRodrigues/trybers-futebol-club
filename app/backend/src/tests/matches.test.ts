@@ -8,7 +8,9 @@ import { app } from '../app';
 import { Response } from 'superagent';
 import SequelizeMatches from '../database/models/SequelizeMatches.model';
 import matchesMock from './mocks/matches.mock';
-import SequelizeTeam from '../database/models/SequelizeTeam.model';
+import usersMock from './mocks/users.mock';
+import JWTUtils from '../utils/JWT.utils';
+import MatchesModel from '../models/Matches.model';
 
 chai.use(chaiHttp);
 
@@ -21,7 +23,6 @@ describe('ROUTE /matches', () => {
     
   it('should return AllMatches', async () => {
     sinon.stub(SequelizeMatches, 'findAll').resolves(matchesMock.getAllMatchesResolves as any)
-    // sinon.stub(SequelizeTeam, 'findAll').resolves(matchesMock.teamsDatabase as any)
 
      chaiHttpResponse = await chai
     .request(app)
@@ -57,12 +58,18 @@ it('should filtered inProgress true matches', async () => {
 })
 
 it('should change in progress to false', async () => {
+  sinon.stub(JWTUtils, 'verify').returns(usersMock.validUser.email as any);
   sinon.stub(SequelizeMatches, 'findByPk').resolves(matchesMock.matchesFinishedDatabase as any)
+  sinon.stub(SequelizeMatches, 'update').resolves([1])
+  
+
 
    chaiHttpResponse = await chai
   .request(app)
   .patch('/matches/1/finish')
+  .set('authorization', usersMock.token)
 
+  
   expect(chaiHttpResponse.status).to.equal(200)
   expect(chaiHttpResponse.body).to.be.deep.equal({ message: "Finished" })
 
@@ -70,25 +77,36 @@ it('should change in progress to false', async () => {
 
 
 it('should update home and aways goals', async () => {
+  sinon.stub(JWTUtils, 'verify').resolves(usersMock.validUser.email as any);
   sinon.stub(SequelizeMatches, 'findByPk').resolves(matchesMock.matchesUpdateGoalsDatabase as any)
+  sinon.stub(SequelizeMatches, 'update').resolves([1])
 
    chaiHttpResponse = await chai
   .request(app)
   .patch('/matches/1')
   .send(matchesMock.matchesUpdateGoalsBody)
+  .set('authorization', usersMock.token)
 
   expect(chaiHttpResponse.status).to.equal(200)
-  expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.matchesUpdateGoalsResolves)
+  expect(chaiHttpResponse.body).to.be.deep.equal({ message: "Updated" })
 
 })
 
 it('create new match', async () => {
+  sinon.stub(JWTUtils, 'verify').returns(usersMock.validUser.email as any);
+  sinon.stub(SequelizeMatches, 'findByPk')
+  .onFirstCall().resolves(matchesMock.teamOne as any)
+  .onSecondCall().resolves(matchesMock.teamTwo as any)
   sinon.stub(SequelizeMatches, 'create').resolves(matchesMock.newMatcheCreateResolvesSuccessful as any)
 
    chaiHttpResponse = await chai
   .request(app)
   .post('/matches')
   .send(matchesMock.newMatcheCreateBody)
+  .set('authorization', usersMock.token)
+
+  console.log(chaiHttpResponse.body);
+  
 
   expect(chaiHttpResponse.status).to.equal(201)
   expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.newMatcheCreateResolvesSuccessful)
@@ -96,26 +114,33 @@ it('create new match', async () => {
 })
 
 it('body with not exist team', async () => {
+  sinon.stub(JWTUtils, 'verify').returns(usersMock.validUser.email as any);
+  sinon.stub(SequelizeMatches, 'findByPk').resolves(null);
+
 
    chaiHttpResponse = await chai
   .request(app)
   .post('/matches')
-  .send(matchesMock.messageNotExistTeamId)
+  .send(matchesMock.newMatchesCreateWithInvalidTeamId as any)
+  .set('authorization', usersMock.token)
 
-  expect(chaiHttpResponse.status).to.equal(422)
-  expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.messageEqualsTeam)
+  expect(chaiHttpResponse.status).to.equal(404)
+  expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.messageNotExistTeamId)
 
 })
 
 it('body with two equals team', async () => {
+  sinon.stub(JWTUtils, 'verify').returns(usersMock.validUser.email as any);
 
   chaiHttpResponse = await chai
  .request(app)
  .post('/matches')
- .send(matchesMock.newMatchesCreateWithInvalidTeamId)
+ .send(matchesMock.newMatchesCreateWithTwoEqualsTeam as any)
+ .set('authorization', usersMock.token)
+ 
 
- expect(chaiHttpResponse.status).to.equal(404)
- expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.messageNotExistTeamId)
+ expect(chaiHttpResponse.status).to.equal(422)
+ expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.messageEqualsTeam)
 
 })
 

@@ -34,8 +34,8 @@ export default class TeamsController {
   }
 
   public async createNewMatch(req: Request, res: Response) {
-    const newMatchData = req.body;
-    const serviceResponse = await this.matchesService.createNewMatch(newMatchData);
+    const { payload, ...rest } = req.body;
+    const serviceResponse = await this.matchesService.createNewMatch(rest);
     res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
 }

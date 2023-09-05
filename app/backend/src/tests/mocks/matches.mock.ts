@@ -9,6 +9,10 @@ const teamsDatabase = [
   { id: 1,teamName: "Avaí/Kindermann" },
 ]
 
+const teamOne =   { id: 16,teamName: "São Paulo" }
+
+const teamTwo =   { id: 9,teamName: "Internacional" }
+
 const getAllMatchesResolves = [
     {
       id: 1,
@@ -123,30 +127,30 @@ const getAllMatchesResolves = [
 
   const newMatcheCreateBody = {
       homeTeamId: 16, // O valor deve ser o id do time
-      awayTeamId: 8, // O valor deve ser o id do time
+      awayTeamId: 9, // O valor deve ser o id do time
       homeTeamGoals: 2,
       awayTeamGoals: 2
     }
   
-    const newMatcheCreateResolvesSuccessful = [{
+    const newMatcheCreateResolvesSuccessful = {
         id: 1,
         homeTeamId: 16,
         homeTeamGoals: 2,
-        awayTeamId: 8,
+        awayTeamId: 9,
         awayTeamGoals: 2,
-        inProgress: true
-      }]
+        inProgress: true,
+      }
 
       const newMatchesCreateWithTwoEqualsTeam = {
-        homeTeamId: 15, // O valor deve ser o id do time
-        awayTeamId: 15, // O valor deve ser o id do time
+        homeTeamId: 5, // O valor deve ser o id do time
+        awayTeamId: 5, // O valor deve ser o id do time
         homeTeamGoals: 2,
         awayTeamGoals: 2
       }
 
       const newMatchesCreateWithInvalidTeamId = {
-        homeTeamId: 15, // O valor deve ser o id do time
-        awayTeamId: 15, // O valor deve ser o id do time
+        homeTeamId: 5, // O valor deve ser o id do time
+        awayTeamId: 50, // O valor deve ser o id do time
         homeTeamGoals: 2,
         awayTeamGoals: 2
       }
@@ -229,5 +233,7 @@ const getAllMatchesResolves = [
     messageNotExistTeamId,
     teamsDatabase,
     findAllMatchesTrueResolves,
-    findAllMatchesFalseResolves
+    findAllMatchesFalseResolves,
+    teamOne,
+    teamTwo
   }

@@ -92,8 +92,8 @@ describe('GET /login/role TESTS', () => {
   beforeEach(function () { sinon.restore(); });
 
 it('when send valid token return role', async () => {
-  sinon.stub(JWTUtils, 'verify').resolves(usersMock.token);
-  sinon.stub(SequelizeUser, 'findOne').resolves(usersMock.validUser as any)
+  sinon.stub(JWTUtils, 'verify').returns(usersMock.validUser.email as any);
+  // sinon.stub(SequelizeUser, 'findOne').resolves(usersMock.validUser as any)
 
   chaiHttpResponse = await chai
  .request(app)

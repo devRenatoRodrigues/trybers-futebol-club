@@ -1,6 +1,11 @@
 import * as jwt from 'jsonwebtoken';
 
-const secret = process.env.JWT_SECRET || 'secret';
+function barerExtract(token: string):string {
+  const auth = token.split(' ')[1];
+  return auth;
+}
+
+const secret = process.env.JWT_SECRET || 'jwt_secret';
 
 function sign(payload: jwt.JwtPayload): string {
   const token = jwt.sign(payload, secret);
@@ -15,4 +20,5 @@ function verify(token: string): jwt.JwtPayload {
 export default {
   sign,
   verify,
+  barerExtract,
 };

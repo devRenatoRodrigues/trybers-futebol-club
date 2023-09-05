@@ -1,6 +1,4 @@
-import { Identifiable } from '..';
-
-export interface ILeaderboard extends Identifiable {
+export interface ILeaderboard {
   name: string,
   totalPoints: number,
   totalGames: number,
@@ -11,4 +9,15 @@ export interface ILeaderboard extends Identifiable {
   goalsOwn: number,
   goalsBalance: number,
   efficiency: string,
+}
+
+export interface ILeaderboardWithoutSum {
+  name: string,
+  totalGames: number,
+  totalVictories: number,
+  totalDraws: number,
+  totalLosses: number,
+  goalsFavor: number,
+  goalsOwn: number,
+  goalsBalance: number,
 }

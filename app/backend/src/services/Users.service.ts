@@ -22,14 +22,14 @@ export default class UserService {
       const token = this.jwtService.sign({ email });
       return { status: 'SUCCESSFUL', data: { token } };
     }
-    return { status: 'NOT_FOUND', data: { message: 'User not found' } };
+    return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
   }
 
-  public async getRole(token: string | undefined): Promise<ServiceResponse<IUserRole>> {
+  public async getRole(token: string | undefined, payload: ILogin)
+    : Promise<ServiceResponse<IUserRole>> {
     if (!token) return { status: 'NOT_FOUND', data: { message: 'Token not found' } };
 
-    const decodedUser = this.jwtService.verify(token);
-    const user = await this.userModel.findByEmail(decodedUser.email);
+    const user = await this.userModel.findByEmail(payload.email);
 
     if (!user) return { status: 'NOT_FOUND', data: { message: 'Token must be a valid token' } };
     return { status: 'SUCCESSFUL', data: { role: user.role } };

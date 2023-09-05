@@ -6,12 +6,8 @@ import validateToken from '../middlewares/validateToken.middleware';
 const matchesController = new MatchesController();
 
 const router = Router();
-router.get('/', validateToken, (req: Request, res: Response) => {
-  if (req.query.inProgress) {
-    matchesController.findByProgress(req, res);
-  } else {
-    matchesController.getAllTeams(req, res);
-  }
+router.get('/', (req: Request, res: Response) => {
+  matchesController.getAllMatches(req, res);
 });
 
 router.patch(
@@ -28,6 +24,7 @@ router.patch(
 
 router.post(
   '/',
+  validateToken,
   validateNewTeamCreate,
   (req: Request, res: Response) => { matchesController.createNewMatch(req, res); },
 );

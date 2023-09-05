@@ -7,16 +7,14 @@ export default class TeamsController {
     private matchesService = new MatchesService(),
   ) { }
 
-  public async getAllTeams(_req: Request, res: Response): Promise<Response> {
-    const serviceResponse = await this.matchesService.getAllMatches();
-    return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
-  }
-
-  public async findByProgress(req: Request, res: Response): Promise<Response> {
+  public async getAllMatches(req: Request, res: Response): Promise<Response> {
     const { inProgress } = req.query;
-    const queryToBool = inProgress === 'true';
-
-    const serviceResponse = await this.matchesService.findByProgress(queryToBool);
+    if (inProgress) {
+      const queryToBool = inProgress === 'true';
+      const serviceResponse = await this.matchesService.findByProgress(queryToBool);
+      return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
+    }
+    const serviceResponse = await this.matchesService.getAllMatches();
     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
 

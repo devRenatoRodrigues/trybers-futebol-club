@@ -1,32 +1,24 @@
 import { NextFunction, Request, Response } from 'express';
 import mapStatusHTTP from '../utils/mapStatusHTTP.utils';
 import JWTUtils from '../utils/JWT.utils';
-import SequelizeUser from '../database/models/SequelizeUser.model';
 
-async function validateToken(req: Request, res: Response, next: NextFunction)
-  : Promise<unknown> {
-  const token = req.headers.authorization;
+async function validateToken(req: Request, res: Response, next: NextFunction): Promise<unknown> {
+  const { authorization } = req.headers;
 
-  if (!token) {
+  if (!authorization) {
     return res.status(mapStatusHTTP('UNAUTHORIZED')).json({ message: 'Token not found' });
   }
+  const validToken = JWTUtils.barerExtract(authorization);
 
   try {
-    const decoded = JWTUtils.verify(token);
-
-    const user = await SequelizeUser.findOne({ where: { email: decoded.email } });
-    if (!user) {
-      return res
-        .status(mapStatusHTTP('UNAUTHORIZED')).json({ message: 'Token must be a valid token' });
-    }
+    const decoded = JWTUtils.verify(validToken);
+    req.body.payload = decoded;
 
     return next();
   } catch (e) {
     return res
       .status(mapStatusHTTP('UNAUTHORIZED')).json({ message: 'Token must be a valid token' });
   }
-
-  return next();
 }
 
 export default validateToken;

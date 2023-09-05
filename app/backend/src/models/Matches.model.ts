@@ -14,19 +14,19 @@ export default class MatchesModel implements IMatchModel {
       },
     );
 
-    return data.map((matches) => matches.toJSON());
+    return data;
   }
 
   async findByProgress(progress: boolean): Promise<IMatches[]> {
     const data = await this.model.findAll({ where: { inProgress: progress },
       include: ['homeTeam', 'awayTeam'] });
-    return Promise.all(data.map((matches) => matches.toJSON()));
+    return data;
   }
 
   async findByPk(id: IMatches['id']): Promise<IMatches | null> {
     const data = await this.model.findByPk(id);
     if (!data) return null;
-    return data.toJSON();
+    return data;
   }
 
   async updateProgress(id: IMatches['id']): Promise<IMatches | null> {

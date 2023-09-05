@@ -1,4 +1,8 @@
-import sequelize = require('sequelize');
+import { IMatchesTeam } from '../Interfaces/matches/IMatches';
+import { formatTable,
+  upateTableGoals,
+  upateTablePoints,
+  updateVictories } from '../utils/formatLeaderboard';
 import SequelizeTeam from '../database/models/SequelizeTeam.model';
 import SequelizeMatches from '../database/models/SequelizeMatches.model';
 import { ILeaderboard } from '../Interfaces/leaderboard/ILeaderboard';
@@ -7,6 +11,7 @@ import { ILeaderboardModel } from '../Interfaces/leaderboard/ILeaderboardModel';
 
 export default class LeaderboardModel implements ILeaderboardModel {
   private matchesmodel = SequelizeMatches;
+  private teamsmodel = SequelizeTeam;
   protected queryHome = `SELECT
   t.team_name as name,
   CAST(SUM(CASE WHEN m.home_team_goals > m.away_team_goals THEN 3
@@ -86,6 +91,19 @@ totalPoints DESC, totalVictories DESC, goalsBalance DESC, goalsFavor DESC
   }
 
   async getClassification(): Promise<ILeaderboard[] | null> {
-    const findAll = this.matchesmodel.findAll();
+    const allMatches = await this.matchesmodel.findAll({
+      where: { inProgress: false },
+      include: [
+        { model: this.teamsmodel, as: 'homeTeam', attributes: ['teamName'] },
+        { model: this.teamsmodel, as: 'awayTeam', attributes: ['teamName'] },
+      ],
+    }) as unknown as IMatchesTeam[];
+
+    const teams = await this.teamsmodel.findAll();
+    const leaderboard = formatTable(teams);
+    updateVictories(allMatches, leaderboard);
+    upateTableGoals(allMatches, leaderboard);
+    const table = upateTablePoints(leaderboard);
+    return table;
   }
 }

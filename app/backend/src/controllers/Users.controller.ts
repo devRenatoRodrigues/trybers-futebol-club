@@ -10,9 +10,6 @@ export default class UserController {
 
   public async login(req: Request, res: Response): Promise<Response> {
     const serviceResponse = await this.userService.login(req.body);
-    if (serviceResponse.status !== 'SUCCESSFUL') {
-      return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
-    }
     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
 
@@ -22,9 +19,6 @@ export default class UserController {
 
     const validToken = JWTUtils.barerExtract(authorization as string);
     const serviceResponse = await this.userService.getRole(validToken, payload);
-    if (serviceResponse.status !== 'SUCCESSFUL') {
-      return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
-    }
     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
 }

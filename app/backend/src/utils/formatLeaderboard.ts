@@ -30,7 +30,7 @@ export function updateVictories(matches: IMatchesTeam[], leaderboard: ILeaderboa
       } else if (match.homeTeamGoals < match.awayTeamGoals) {
         awayTeam.totalVictories += 1;
         homeTeam.totalLosses += 1;
-      } else {
+      } else if (match.homeTeamGoals === match.awayTeamGoals) {
         homeTeam.totalDraws += 1;
         awayTeam.totalDraws += 1;
       }

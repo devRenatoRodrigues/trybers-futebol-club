@@ -50,7 +50,7 @@ it('should return all away points', async () => {
     expect(chaiHttpResponse.body).to.be.deep.equal(leaderboardMock.findAwayPointsResolves)
 })
 
-it('should return all away points', async () => {
+it('should return all points', async () => {
     sinon.stub(SequelizeMatches, 'findAll').resolves(leaderboardMock.findAllMatchesResolves as any)
     sinon.stub(SequelizeTeam, 'findAll').resolves(leaderboardMock.findAllTeamResolves as any)
 
@@ -63,11 +63,8 @@ it('should return all away points', async () => {
 })
 
 it('should fail home return error', async () => {
-    const sequelizeStub = {
-        query: sinon.stub().resolves([[], null]),
-      };
     
-    sinon.stub(SequelizeMatches, 'sequelize').get(() => sequelizeStub)
+    sinon.stub(SequelizeMatches, 'sequelize').get(() => undefined)
 
      chaiHttpResponse = await chai
     .request(app)
@@ -78,11 +75,8 @@ it('should fail home return error', async () => {
 })
 
 it('should fail away return error', async () => {
-    const sequelizeStub = {
-        query: sinon.stub().resolves([[], null]),
-      };
     
-    sinon.stub(SequelizeMatches, 'sequelize').get(() => sequelizeStub)
+    sinon.stub(SequelizeMatches, 'sequelize').get(() => undefined)
 
      chaiHttpResponse = await chai
     .request(app)
@@ -92,5 +86,16 @@ it('should fail away return error', async () => {
     expect(chaiHttpResponse.body).to.be.deep.equal({message: 'error'})
 })
 
+it('should fail get points return error', async () => {
+  sinon.stub(SequelizeMatches, 'findAll').resolves(null as any)
+  sinon.stub(SequelizeTeam, 'findAll').resolves(null as any)
+
+   chaiHttpResponse = await chai
+  .request(app)
+  .get('/leaderboard')
+
+  expect(chaiHttpResponse.status).to.equal(404)
+  expect(chaiHttpResponse.body).to.be.deep.equal({message: 'error'})
+})
 
   });

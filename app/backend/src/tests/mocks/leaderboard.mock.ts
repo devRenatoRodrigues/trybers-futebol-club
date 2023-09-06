@@ -79,7 +79,22 @@ const findHomePointsResolves = [
             awayTeam: {
                 teamName: "Palmeiras"
             }
-          } ]
+          },
+          {
+            id: 2,
+            homeTeamId: 2,
+            homeTeamGoals:0,
+            awayTeamId: 1,
+            awayTeamGoals: 0,
+            inProgress: false,
+            homeTeam: {
+                teamName: "Corinthians"
+            },
+            awayTeam: {
+                teamName: "Palmeiras"
+            }
+          }
+        ]
 
           const findAllTeamResolves = [
             {id:1, teamName: "Palmeiras"},
@@ -88,33 +103,35 @@ const findHomePointsResolves = [
 
             const findAllPointsResolves =  [{
                 name: "Palmeiras",
-                totalPoints: 6,
-                totalGames: 2,
+                totalPoints: 7,
+                totalGames: 3,
                 totalVictories: 2,
-                totalDraws: 0,
+                totalDraws: 1,
                 totalLosses: 0,
                 goalsFavor: 6,
                 goalsOwn: 1,
                 goalsBalance: 5,
-                efficiency: "100.00"
+                efficiency: "77.78"
               },
               {
                 name: "Corinthians",
-                totalPoints: 0,
-                totalGames: 2,
+                totalPoints: 1,
+                totalGames: 3,
                 totalVictories: 0,
-                totalDraws: 0,
+                totalDraws: 1,
                 totalLosses: 2,
                 goalsFavor: 1,
                 goalsOwn: 6,
                 goalsBalance: -5,
-                efficiency: "0.00"
+                efficiency: "11.11"
               }]
+
+              
 
   export default { 
     findHomePointsResolves,
     findAwayPointsResolves,
     findAllMatchesResolves,
     findAllTeamResolves,
-    findAllPointsResolves
+    findAllPointsResolves,
   }

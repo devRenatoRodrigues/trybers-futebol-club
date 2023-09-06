@@ -1,5 +1,7 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
+import * as bcrypt from 'bcryptjs';
+
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
@@ -81,6 +83,18 @@ it('valid email and password', async () => {
  expect(chaiHttpResponse.status).to.equal(200)
  expect(chaiHttpResponse.body).to.have.a.key('token')
  expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.validTokenAcess)
+})
+
+it('invalid user', async () => {
+  sinon.stub(SequelizeUser, 'findOne').resolves(null)
+
+  chaiHttpResponse = await chai
+ .request(app)
+ .post('/login')
+ .send(usersMock.validLoginBody)
+ 
+ expect(chaiHttpResponse.status).to.equal(401)
+ expect(chaiHttpResponse.body).to.be.deep.equal({ message: 'Invalid email or password' })
 })
 
 });

@@ -5,6 +5,7 @@ const validTokenAcess = {
   const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjU0NTI3MTg5fQ.XS_9AA82iNoiVaASi0NtJpqOQ_gHSHhxrpIdigiT-fc"
 
   const WithoutEmailOrPasswordResponse = { message: "All fields must be filled" }
+  
 
   const validLoginBody = {
     email: "admin@admin.com",
@@ -41,6 +42,9 @@ const validTokenAcess = {
     ...user,   password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW'
   }
 
+  const invalidUser = {
+    ...user,   password: '$2a$08$xi.'
+  }
 
 
   const invalidPasswordOrEmailResponse = { "message": "Invalid email or password" }
@@ -63,5 +67,6 @@ const validTokenAcess = {
     loginWithInvalidPassword,
     loginWithInvalidEmail,
     validUser,
-    user
+    user,
+    invalidUser
   }

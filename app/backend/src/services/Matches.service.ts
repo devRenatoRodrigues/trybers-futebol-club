@@ -21,8 +21,6 @@ export default class MatchesService {
 
   public async updateMatchProgress(id: IMatches['id'])
     : Promise<ServiceResponse<ServiceMessage>> {
-    if (!id) return { status: 'NOT_FOUND', data: { message: 'Match Not Found' } };
-
     const updateProgress = await this.matchesModel.updateProgress(id);
     if (!updateProgress) {
       return { status: 'CONFLICT',
@@ -34,8 +32,6 @@ export default class MatchesService {
 
   public async updateMatchGoals(id: IMatches['id'], match: IMatches)
     : Promise<ServiceResponse<ServiceMessage>> {
-    if (!id) return { status: 'NOT_FOUND', data: { message: 'Match Not Found' } };
-
     const updateProgress = await this.matchesModel.updateGoals(id, match);
     if (!updateProgress) {
       return { status: 'CONFLICT',
@@ -52,8 +48,6 @@ export default class MatchesService {
       return { status: 'NOT_FOUND', data: { message: 'There is no team with such id!' } };
     }
     const newmatch = await this.matchesModel.create(data);
-    console.log(data);
-    console.log(newmatch);
 
     return { status: 'CREATED', data: newmatch };
   }

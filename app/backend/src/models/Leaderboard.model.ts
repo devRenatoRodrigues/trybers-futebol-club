@@ -74,7 +74,7 @@ totalPoints DESC, totalVictories DESC, goalsBalance DESC, goalsFavor DESC
 
   async getHomeTeamsClassification(): Promise<ILeaderboard[] | null > {
     const [results] = await this.matchesmodel.sequelize?.query(this.queryHome) || [[], null];
-    if (!results) {
+    if (results.length === 0) {
       return null;
     }
 
@@ -83,7 +83,7 @@ totalPoints DESC, totalVictories DESC, goalsBalance DESC, goalsFavor DESC
 
   async getAwayClassification(): Promise<ILeaderboard[] | null> {
     const [results] = await this.matchesmodel.sequelize?.query(this.queryAway) || [[], null];
-    if (!results) {
+    if (results.length === 0) {
       return null;
     }
 

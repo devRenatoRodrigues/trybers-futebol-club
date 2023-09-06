@@ -83,7 +83,6 @@ it('valid email and password', async () => {
  expect(chaiHttpResponse.body).to.be.deep.equal(usersMock.validTokenAcess)
 })
 
-
 });
 
 describe('GET /login/role TESTS', () => {
@@ -99,8 +98,6 @@ it('when send valid token return role', async () => {
  .request(app)
  .get('/login/role')
  .set('authorization', `Bearer ${usersMock.token}`)
-
-console.log(chaiHttpResponse.body);
 
  expect(chaiHttpResponse.status).to.equal(200)
  expect(chaiHttpResponse.body).to.have.a.key('role')

@@ -10,7 +10,6 @@ import SequelizeMatches from '../database/models/SequelizeMatches.model';
 import matchesMock from './mocks/matches.mock';
 import usersMock from './mocks/users.mock';
 import JWTUtils from '../utils/JWT.utils';
-import MatchesModel from '../models/Matches.model';
 
 chai.use(chaiHttp);
 
@@ -71,6 +70,22 @@ it('should change in progress to false', async () => {
 
 })
 
+it('should return invalid matche id on finish match', async () => {
+  sinon.stub(JWTUtils, 'verify').resolves(usersMock.validUser.email as any);
+  sinon.stub(SequelizeMatches, 'findByPk').returns(null as any)
+  sinon.stub(SequelizeMatches, 'update').resolves([0])
+
+   chaiHttpResponse = await chai
+  .request(app)
+  .patch('/matches/50/finish')
+  .send(matchesMock.matchesUpdateGoalsBody)
+  .set('authorization', `Bearer ${usersMock.token}`)
+
+  expect(chaiHttpResponse.status).to.equal(409)
+  expect(chaiHttpResponse.body).to.be.deep.equal({ message: `There are no updates to perform in match 50` } )
+
+})
+
 
 it('should update home and aways goals', async () => {
   sinon.stub(JWTUtils, 'verify').resolves(usersMock.validUser.email as any);
@@ -85,6 +100,22 @@ it('should update home and aways goals', async () => {
 
   expect(chaiHttpResponse.status).to.equal(200)
   expect(chaiHttpResponse.body).to.be.deep.equal({ message: "Updated" })
+
+})
+
+it('should return invalid matche id on update goals', async () => {
+  sinon.stub(JWTUtils, 'verify').resolves(usersMock.validUser.email as any);
+  sinon.stub(SequelizeMatches, 'findByPk').returns(null as any)
+  sinon.stub(SequelizeMatches, 'update').resolves([0])
+
+   chaiHttpResponse = await chai
+  .request(app)
+  .patch('/matches/50')
+  .send(matchesMock.matchesUpdateGoalsBody)
+  .set('authorization', `Bearer ${usersMock.token}`)
+
+  expect(chaiHttpResponse.status).to.equal(409)
+  expect(chaiHttpResponse.body).to.be.deep.equal({ message: `There are no updates to perform in match 50` } )
 
 })
 

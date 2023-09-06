@@ -47,7 +47,7 @@ const validTokenAcess = {
   const withoutTokenResponse = { "message": "Token not found" }
   const invalidTokenResponse = { "message": "Token must be a valid token" }
 
-  const roleUserResponse =   { "role": "admin" }
+  const roleUserResponse =   { role: "admin" }
 
   export default {
     validTokenAcess,
@@ -62,5 +62,6 @@ const validTokenAcess = {
     roleUserResponse,
     loginWithInvalidPassword,
     loginWithInvalidEmail,
-    validUser
+    validUser,
+    user
   }

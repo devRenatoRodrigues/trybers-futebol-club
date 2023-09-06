@@ -28,7 +28,6 @@ describe('ROUTE /matches', () => {
     .request(app)
     .get('/matches')
 
-
     expect(chaiHttpResponse.status).to.equal(200)
     expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.getAllMatchesResolves)
 })
@@ -61,15 +60,12 @@ it('should change in progress to false', async () => {
   sinon.stub(JWTUtils, 'verify').returns(usersMock.validUser.email as any);
   sinon.stub(SequelizeMatches, 'findByPk').resolves(matchesMock.matchesFinishedDatabase as any)
   sinon.stub(SequelizeMatches, 'update').resolves([1])
-  
-
 
    chaiHttpResponse = await chai
   .request(app)
   .patch('/matches/1/finish')
   .set('authorization', usersMock.token)
 
-  
   expect(chaiHttpResponse.status).to.equal(200)
   expect(chaiHttpResponse.body).to.be.deep.equal({ message: "Finished" })
 
@@ -85,7 +81,7 @@ it('should update home and aways goals', async () => {
   .request(app)
   .patch('/matches/1')
   .send(matchesMock.matchesUpdateGoalsBody)
-  .set('authorization', usersMock.token)
+  .set('authorization', `Bearer ${usersMock.token}`)
 
   expect(chaiHttpResponse.status).to.equal(200)
   expect(chaiHttpResponse.body).to.be.deep.equal({ message: "Updated" })
@@ -103,10 +99,7 @@ it('create new match', async () => {
   .request(app)
   .post('/matches')
   .send(matchesMock.newMatcheCreateBody)
-  .set('authorization', usersMock.token)
-
-  console.log(chaiHttpResponse.body);
-  
+  .set('authorization', `Bearer ${usersMock.token}`)
 
   expect(chaiHttpResponse.status).to.equal(201)
   expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.newMatcheCreateResolvesSuccessful)
@@ -122,7 +115,7 @@ it('body with not exist team', async () => {
   .request(app)
   .post('/matches')
   .send(matchesMock.newMatchesCreateWithInvalidTeamId as any)
-  .set('authorization', usersMock.token)
+  .set('authorization', `Bearer ${usersMock.token}`)
 
   expect(chaiHttpResponse.status).to.equal(404)
   expect(chaiHttpResponse.body).to.be.deep.equal(matchesMock.messageNotExistTeamId)
@@ -136,7 +129,7 @@ it('body with two equals team', async () => {
  .request(app)
  .post('/matches')
  .send(matchesMock.newMatchesCreateWithTwoEqualsTeam as any)
- .set('authorization', usersMock.token)
+ .set('authorization', `Bearer ${usersMock.token}`)
  
 
  expect(chaiHttpResponse.status).to.equal(422)

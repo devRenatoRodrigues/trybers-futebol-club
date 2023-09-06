@@ -19,6 +19,8 @@ export default class UserController {
   public async getRole(req: Request, res: Response): Promise<Response> {
     const { authorization } = req.headers;
     const { payload } = req.body;
+    console.log('pay', payload);
+
     const validToken = JWTUtils.barerExtract(authorization as string);
     const serviceResponse = await this.userService.getRole(validToken, payload);
     if (serviceResponse.status !== 'SUCCESSFUL') {

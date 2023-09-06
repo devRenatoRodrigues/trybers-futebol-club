@@ -27,9 +27,14 @@ export default class UserService {
 
   public async getRole(token: string | undefined, payload: ILogin)
     : Promise<ServiceResponse<IUserRole>> {
+    console.log('token', token);
+    const { email } = payload;
+    console.log('email', email);
+
     if (!token) return { status: 'NOT_FOUND', data: { message: 'Token not found' } };
 
-    const user = await this.userModel.findByEmail(payload.email);
+    const user = await this.userModel.findByEmail(email);
+    console.log(user);
 
     if (!user) return { status: 'NOT_FOUND', data: { message: 'Token must be a valid token' } };
     return { status: 'SUCCESSFUL', data: { role: user.role } };

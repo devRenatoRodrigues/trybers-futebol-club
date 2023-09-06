@@ -92,14 +92,15 @@ describe('GET /login/role TESTS', () => {
   beforeEach(function () { sinon.restore(); });
 
 it('when send valid token return role', async () => {
-  sinon.stub(JWTUtils, 'verify').returns(usersMock.validUser.email as any);
-  // sinon.stub(SequelizeUser, 'findOne').resolves(usersMock.validUser as any)
+  sinon.stub(JWTUtils, 'verify').returns(usersMock.token as any);
+  sinon.stub(SequelizeUser, 'findOne').resolves(usersMock.user as any)
 
   chaiHttpResponse = await chai
  .request(app)
  .get('/login/role')
- .set('authorization', usersMock.token);
+ .set('authorization', `Bearer ${usersMock.token}`)
 
+console.log(chaiHttpResponse.body);
 
  expect(chaiHttpResponse.status).to.equal(200)
  expect(chaiHttpResponse.body).to.have.a.key('role')
